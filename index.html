@@ -1,1 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    integrity="sha384-..."
+    crossorigin="anonymous"
+  />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- Handlebars library -->
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
+</head>
+<body>
+  <!-- Persistent Scoreboard -->
+  <div id="scoreboard" class="bg-dark text-light p-2 d-none">
+    <div class="d-flex justify-content-between container">
+      <span>Questions: <span id="count">0</span>/<span id="total">0</span></span>
+      <span>Time: <span id="time">0:00</span></span>
+      <span>Score: <span id="score">0</span></span>
+    </div>
+  </div>
+
+  <!-- Main App Container -->
+  <div id="app" class="container my-4">
+    <!-- Content will be injected via Handlebars templates -->
+  </div>
+
+  <!-- Handlebars Templates -->
+
+  <!-- Home Screen Template -->
+  <script id="home-template" type="text/x-handlebars-template">
+    <div class="text-center my-5">
+      <h1 class="mb-4">Welcome to the Quiz!</h1>
+      <p class="lead">Enter your name and choose a quiz to get started:</p>
+      <div class="mb-3">
+        <input id="username" type="text" class="form-control w-50 d-inline-block" placeholder="Your Name" />
+      </div>
+      <div>
+        <button class="btn btn-primary btn-lg mx-2 start-quiz-btn" data-quiz="1">
+          {{quiz1Name}}
+        </button>
+        <button class="btn btn-primary btn-lg mx-2 start-quiz-btn" data-quiz="2">
+          {{quiz2Name}}
+        </button>
+      </div>
+    </div>
+  </script>
+
+  <!-- Multiple Choice Question Template -->
+  <script id="question-mc-template" type="text/x-handlebars-template">
+    <h3 class="mb-4">{{question}}</h3>
+    <div>
+      {{#each options}}
+        <button class="btn btn-outline-secondary d-block text-start option-btn my-2" data-value="{{this}}">
+          {{this}}
+        </button>
+      {{/each}}
+    </div>
+    <div id="feedback" class="mt-3" style="display:none;">
+      <div id="feedback-text" class="mb-2"></div>
+      <button class="btn btn-primary" id="feedback-button">Got it</button>
+    </div>
+  </script>
+
+  <!-- Text Input Question Template -->
+  <script id="question-text-template" type="text/x-handlebars-template">
+    <h3 class="mb-4">{{question}}</h3>
+    <div class="d-flex">
+      <input type="text" id="text-answer" class="form-control w-75" placeholder="Type your answer..." />
+      <button class="btn btn-secondary ms-2" id="submit-answer">Submit</button>
+    </div>
+    <div id="feedback" class="mt-3" style="display:none;">
+      <div id="feedback-text" class="mb-2"></div>
+      <button class="btn btn-primary" id="feedback-button">Got it</button>
+    </div>
+  </script>
+
+  <!-- Image Selection Question Template -->
+  <script id="question-img-template" type="text/x-handlebars-template">
+    <h3 class="mb-4">{{question}}</h3>
+    <div class="row">
+      {{#each options}}
+      <div class="col-6 col-md-4 mb-3">
+        <img src="{{imageUrl}}" alt="Option image" class="img-fluid border img-option" data-value="{{value}}" style="cursor:pointer;" />
+      </div>
+      {{/each}}
+    </div>
+    <div id="feedback" class="mt-3" style="display:none;">
+      <div id="feedback-text" class="mb-2"></div>
+      <button class="btn btn-primary" id="feedback-button">Got it</button>
+    </div>
+  </script>
+
+  <!-- Quiz Result Template -->
+  <script id="result-template" type="text/x-handlebars-template">
+    <div class="text-center my-5">
+      <h2>{{resultHeading}}</h2>
+      <p class="lead">Hi {{name}}, you scored {{score}} out of {{total}} ({{percent}}%).</p>
+      <p>{{resultMessage}}</p>
+      <button class="btn btn-success btn-lg mx-2" id="retake-btn">Retake Quiz</button>
+      <button class="btn btn-secondary btn-lg mx-2" id="home-btn">Back to Home</button>
+    </div>
+  </script>
+
+  <!-- Main JavaScript File -->
+  <script src="js/app.js"></script>
+</body>
+</html>
 
