@@ -1,0 +1,111 @@
+{
+    "quizzes": [
+      {
+        "id": 1,
+        "title": "JavaScript Basics",
+        "questions": [
+          {
+            "id": 1,
+            "type": "multiple-choice",
+            "question": "Which keyword is used to declare a variable in JavaScript?",
+            "options": ["var", "let", "int", "func"],
+            "answer": "var",
+            "explanation": "In JavaScript, `var` was traditionally used to declare variables (though `let` and `const` are now common)."
+          },
+          {
+            "id": 2,
+            "type": "text",
+            "question": "What is the output of `console.log(typeof [])` in JavaScript?",
+            "answer": "object",
+            "explanation": "Arrays in JavaScript are a type of object, so typeof [] returns 'object'."
+          },
+          {
+            "id": 3,
+            "type": "image",
+            "question": "Select the image that shows the JavaScript logo:",
+            "options": [
+              {
+                "imageUrl": "https://raw.githubusercontent.com/your-repo/images/js-logo.png",
+                "value": "js"
+              },
+              {
+                "imageUrl": "https://raw.githubusercontent.com/your-repo/images/python-logo.png",
+                "value": "python"
+              }
+            ],
+            "answer": "js",
+            "explanation": "The JavaScript logo is a yellow rectangle with 'JS' on it."
+          },
+          {
+            "id": 4,
+            "type": "multiple-choice",
+            "question": "Which method is used to parse a JSON string into a JavaScript object?",
+            "options": ["JSON.parse()", "JSON.stringify()", "JSON.objectify()", "parseJSON()"],
+            "answer": "JSON.parse()",
+            "explanation": "JSON.parse() converts a JSON string into a JavaScript object."
+          },
+          {
+            "id": 5,
+            "type": "text",
+            "question": "What is the value of 'this' inside a regular function in the global context in non-strict mode?",
+            "answer": "window",
+            "explanation": "In the global context, 'this' refers to the window object in browsers."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Python Basics",
+        "questions": [
+          {
+            "id": 1,
+            "type": "multiple-choice",
+            "question": "What is the correct file extension for Python files?",
+            "options": [".py", ".python", ".pt", ".p"],
+            "answer": ".py",
+            "explanation": "Python files use the .py extension."
+          },
+          {
+            "id": 2,
+            "type": "text",
+            "question": "What keyword is used to define a function in Python?",
+            "answer": "def",
+            "explanation": "Python uses the 'def' keyword to define a new function."
+          },
+          {
+            "id": 3,
+            "type": "image",
+            "question": "Which image shows the Python logo?",
+            "options": [
+              {
+                "imageUrl": "https://raw.githubusercontent.com/your-repo/images/python-logo.png",
+                "value": "python"
+              },
+              {
+                "imageUrl": "https://raw.githubusercontent.com/your-repo/images/java-logo.png",
+                "value": "java"
+              }
+            ],
+            "answer": "python",
+            "explanation": "The Python logo typically features two snakes forming a shape."
+          },
+          {
+            "id": 4,
+            "type": "multiple-choice",
+            "question": "Which command is used to install packages in Python?",
+            "options": ["pip install", "npm install", "apt-get install", "easy_install"],
+            "answer": "pip install",
+            "explanation": "The 'pip install' command is used to install Python packages."
+          },
+          {
+            "id": 5,
+            "type": "text",
+            "question": "What built-in Python data type is an unordered collection of unique elements?",
+            "answer": "set",
+            "explanation": "A set in Python is an unordered collection with no duplicate elements."
+          }
+        ]
+      }
+    ]
+  }
+  
