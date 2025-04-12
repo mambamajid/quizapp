@@ -37,7 +37,7 @@ async function loadTemplate(name) {
 
 // Load Quiz from JSONPlaceholder
 async function loadQuizData() {
-  const response = await fetch('https://my-json-server.typicode.com/YOUR_USERNAME/YOUR_REPO/quiz1');
+  const response = await fetch('https://my-json-server.typicode.com/mambamajid/quizapp/quiz1');
   quizData = await response.json();
   totalQuestions = quizData.length;
   document.getElementById('total-questions').textContent = totalQuestions;
