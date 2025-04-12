@@ -1,0 +1,14 @@
+<div class="text-center">
+  {{#if passed}}
+    <h2 class="text-success">Congratulations {{name}}! 🎉</h2>
+    <p class="result-message">You passed the quiz!</p>
+  {{else}}
+    <h2 class="text-danger">Sorry {{name}}, you failed the quiz.</h2>
+    <p class="result-message">Don’t worry — try again and you’ll get it!</p>
+  {{/if}}
+
+  <div class="mt-4 d-grid gap-2">
+    <button id="retake" class="btn btn-outline-primary">Retake Quiz</button>
+    <button id="goHome" class="btn btn-secondary">Return Home</button>
+  </div>
+</div>
