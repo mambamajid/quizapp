@@ -6,6 +6,11 @@ let totalQuestions = 0;
 let timerInterval;
 let startTime;
 
+// Register 'eq' helper for Handlebars
+Handlebars.registerHelper('eq', function (a, b) {
+  return a === b;
+});
+
 // Utility: Format timer as mm:ss
 function formatTime(seconds) {
   const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -63,7 +68,7 @@ async function renderResult() {
   document.getElementById('scoreboard').classList.add('d-none');
 }
 
-// Handle Answer
+// Handle Answer Logic
 function handleAnswer(isCorrect, explanation = '') {
   if (isCorrect) {
     score++;
@@ -109,6 +114,8 @@ document.addEventListener('click', async (e) => {
     await loadQuizData();
     document.getElementById('scoreboard').classList.remove('d-none');
     document.getElementById('score').textContent = 0;
+    currentQuestionIndex = 0;
+    score = 0;
     startTimer();
     renderQuestion();
   }
@@ -138,8 +145,9 @@ document.addEventListener('click', async (e) => {
   if (e.target.matches('#retake')) {
     currentQuestionIndex = 0;
     score = 0;
-    renderQuestion();
+    document.getElementById('score').textContent = 0;
     startTimer();
+    renderQuestion();
   }
 
   // Return Home
@@ -151,5 +159,5 @@ document.addEventListener('click', async (e) => {
   }
 });
 
-// Initialize App
+// Start App
 renderWelcome();
