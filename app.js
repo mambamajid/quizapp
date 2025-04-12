@@ -1,113 +1,155 @@
-// Simple quiz data - you can replace with API calls later
-const quizData = {
-    questions: [
-        {
-            number: 1,
-            question: "What is 2 + 2?",
-            options: ["3", "4", "5", "6"],
-            correct: 1
-        },
-        {
-            number: 2,
-            question: "Which language runs in browsers?",
-            options: ["Java", "C", "Python", "JavaScript"],
-            correct: 3
-        }
-    ]
-};
+let currentQuestionIndex = 0;
+let quizData = [];
+let studentName = '';
+let score = 0;
+let totalQuestions = 0;
+let timerInterval;
+let startTime;
 
-// App state
-const state = {
-    currentQuestion: 0,
-    score: 0,
-    startTime: null,
-    studentName: ""
-};
-
-// Initialize app
-function init() {
-    document.getElementById('app-container').innerHTML = templates.mainMenu();
-    document.getElementById('start-form').addEventListener('submit', startQuiz);
+// Utility: Format timer as mm:ss
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+  const secs = (seconds % 60).toString().padStart(2, '0');
+  return `${mins}:${secs}`;
 }
 
-// Start quiz handler
-function startQuiz(e) {
-    e.preventDefault();
-    state.studentName = document.getElementById('student-name').value;
-    state.startTime = Date.now();
-    state.currentQuestion = 0;
-    state.score = 0;
-    showQuestion();
-    startTimer();
-}
-
-// Show current question
-function showQuestion() {
-    const question = quizData.questions[state.currentQuestion];
-    const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-    
-    document.getElementById('app-container').innerHTML = templates.quizQuestion({
-        ...question,
-        time: elapsed,
-        score: state.score
-    });
-
-    // Add event listeners to options
-    document.querySelectorAll('.btn-option').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            checkAnswer(parseInt(e.target.dataset.option));
-        });
-    });
-}
-
-// Check answer
-function checkAnswer(selectedIndex) {
-    const question = quizData.questions[state.currentQuestion];
-    if (selectedIndex === question.correct) {
-        state.score += 50; // 50 points per question
-        alert("Correct!");
-    } else {
-        alert(`Wrong! The correct answer was: ${question.options[question.correct]}`);
-    }
-    
-    state.currentQuestion++;
-    if (state.currentQuestion < quizData.questions.length) {
-        showQuestion();
-    } else {
-        endQuiz();
-    }
-}
-
-// Timer
+// Timer Setup
 function startTimer() {
-    setInterval(() => {
-        const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-        const timer = document.querySelector('.timer-display');
-        if (timer) timer.textContent = `${elapsed}s`;
+  const timerDisplay = document.getElementById('timer');
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    timerDisplay.textContent = formatTime(elapsed);
+  }, 1000);
+}
+
+// Load and Compile Handlebars Template
+async function loadTemplate(name) {
+  const res = await fetch(`${name}.handlebars`);
+  const src = await res.text();
+  return Handlebars.compile(src);
+}
+
+// Load Quiz from JSONPlaceholder
+async function loadQuizData() {
+  const response = await fetch('https://my-json-server.typicode.com/YOUR_USERNAME/YOUR_REPO/quiz1');
+  quizData = await response.json();
+  totalQuestions = quizData.length;
+  document.getElementById('total-questions').textContent = totalQuestions;
+}
+
+// Show Welcome Screen
+async function renderWelcome() {
+  const template = await loadTemplate('welcome');
+  document.getElementById('app').innerHTML = template();
+}
+
+// Show Quiz Question
+async function renderQuestion() {
+  const template = await loadTemplate('quiz');
+  const question = quizData[currentQuestionIndex];
+  const html = template(question);
+  document.getElementById('app').innerHTML = html;
+  document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+}
+
+// Show Result Screen
+async function renderResult() {
+  clearInterval(timerInterval);
+  const template = await loadTemplate('result');
+  const passed = (score / totalQuestions) >= 0.8;
+  const html = template({ name: studentName, passed });
+  document.getElementById('app').innerHTML = html;
+  document.getElementById('scoreboard').classList.add('d-none');
+}
+
+// Handle Answer
+function handleAnswer(isCorrect, explanation = '') {
+  if (isCorrect) {
+    score++;
+    document.getElementById('score').textContent = score;
+    const message = document.createElement('div');
+    message.className = 'correct-message';
+    message.textContent = 'Awesome!';
+    document.getElementById('app').appendChild(message);
+
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizData.length) {
+        renderQuestion();
+      } else {
+        renderResult();
+      }
     }, 1000);
+  } else {
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.innerHTML = `<p>${explanation}</p><button class="btn btn-primary mt-2">Got it</button>`;
+    document.getElementById('app').appendChild(feedback);
+
+    feedback.querySelector('button').addEventListener('click', () => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizData.length) {
+        renderQuestion();
+      } else {
+        renderResult();
+      }
+    });
+  }
 }
 
-// End quiz
-function endQuiz() {
-    const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-    const passed = state.score >= 80;
-    
-    document.getElementById('app-container').innerHTML = `
-        <div class="quiz-card card">
-            <div class="card-header ${passed ? 'bg-success' : 'bg-danger'} text-white">
-                <h2>Quiz Complete!</h2>
-            </div>
-            <div class="card-body text-center">
-                <h3>${passed ? 'Congratulations' : 'Sorry'}, ${state.studentName}!</h3>
-                <p>Your score: ${state.score}%</p>
-                <p>Time: ${elapsed} seconds</p>
-                <button class="btn btn-primary" onclick="window.location.reload()">
-                    Try Again
-                </button>
-            </div>
-        </div>
-    `;
-}
+// Global Event Delegation
+document.addEventListener('click', async (e) => {
+  // Start Quiz
+  if (e.target.matches('#startQuiz')) {
+    e.preventDefault();
+    studentName = document.getElementById('studentName').value.trim();
+    if (!studentName) return alert('Please enter your name');
 
-// Start the app
-document.addEventListener('DOMContentLoaded', init);
+    await loadQuizData();
+    document.getElementById('scoreboard').classList.remove('d-none');
+    document.getElementById('score').textContent = 0;
+    startTimer();
+    renderQuestion();
+  }
+
+  // Multiple Choice Answer
+  if (e.target.matches('.choice-btn')) {
+    const selected = e.target.dataset.value;
+    const correct = quizData[currentQuestionIndex].answer;
+    handleAnswer(selected === correct, `Correct answer: ${correct}`);
+  }
+
+  // Narrative Answer
+  if (e.target.matches('#submitNarrative')) {
+    const input = document.getElementById('narrativeInput').value.trim().toLowerCase();
+    const correct = quizData[currentQuestionIndex].answer.toLowerCase();
+    handleAnswer(input === correct, `The right answer was: ${quizData[currentQuestionIndex].answer}`);
+  }
+
+  // Image Option Answer
+  if (e.target.matches('.img-option')) {
+    const selected = e.target.dataset.value;
+    const correct = quizData[currentQuestionIndex].answer;
+    handleAnswer(selected === correct, `Correct image was for: ${correct}`);
+  }
+
+  // Retake Quiz
+  if (e.target.matches('#retake')) {
+    currentQuestionIndex = 0;
+    score = 0;
+    renderQuestion();
+    startTimer();
+  }
+
+  // Return Home
+  if (e.target.matches('#goHome')) {
+    clearInterval(timerInterval);
+    currentQuestionIndex = 0;
+    score = 0;
+    renderWelcome();
+  }
+});
+
+// Initialize App
+renderWelcome();
