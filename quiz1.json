@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "type": "multiple",
+    "question": "What does DOM stand for in web development?",
+    "options": ["Document Object Model", "Data Object Management", "Display Oriented Module", "Document Order Method"],
+    "answer": "Document Object Model"
+  },
+  {
+    "id": 2,
+    "type": "narrative",
+    "question": "In JavaScript, what keyword is used to declare a constant variable?",
+    "answer": "const"
+  },
+  {
+    "id": 3,
+    "type": "image",
+    "question": "Click the correct logo for JavaScript.",
+    "images": [
+      { "src": "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png", "value": "javascript" },
+      { "src": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", "value": "python" }
+    ],
+    "answer": "javascript"
+  },
+  {
+    "id": 4,
+    "type": "multiple",
+    "question": "Which of the following is a JavaScript framework?",
+    "options": ["Laravel", "Django", "React", "Spring Boot"],
+    "answer": "React"
+  },
+  {
+    "id": 5,
+    "type": "narrative",
+    "question": "What built-in JavaScript method is used to parse a JSON string into an object?",
+    "answer": "JSON.parse"
+  }
+]
