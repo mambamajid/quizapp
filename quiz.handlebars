@@ -1,0 +1,22 @@
+<div class="quiz-container">
+  <h3 class="question-title">{{question}}</h3>
+
+  {{#if (eq type "multiple")}}
+    {{#each options}}
+      <button class="btn btn-outline-primary choice-btn" data-value="{{this}}">
+        {{this}}
+      </button>
+    {{/each}}
+  
+  {{else if (eq type "narrative")}}
+    <input type="text" id="narrativeInput" class="form-control mb-3" placeholder="Type your answer here..." />
+    <button id="submitNarrative" class="btn btn-primary w-100">Submit</button>
+
+  {{else if (eq type "image")}}
+    <div class="d-flex justify-content-center flex-wrap">
+      {{#each images}}
+        <img src="{{src}}" data-value="{{value}}" class="img-option" />
+      {{/each}}
+    </div>
+  {{/if}}
+</div>
